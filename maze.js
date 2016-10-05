@@ -1,10 +1,15 @@
 var boundaries;
 var end;
 var start;
+var statusState;
+var win = false;
+var outOfBounds = false;
+
 window.onload = function() {
     boundaries = document.querySelectorAll(".boundary");
     end = document.getElementById("end");
     start = document.getElementById("start");
+    statusState = document.getElementById("status");
 
     start.onclick = resetGame;
     end.onmouseover = CheckWin;
@@ -13,39 +18,32 @@ window.onload = function() {
 	}
 }
 
-    //Test Code
-    //var myElement = document.getElementById("boundary1");
-	//myElement.style.backgroundColor = "red";
-	//boundary1.style.backgroundColor = div.youlose.backgroundColor;
-	//document.getElementById("boundary1").style.backgroundColor = "red";
-
 function overBounds(){
-		if(!hasClass(boundaries[0], "youlose")) // Checks if the youlose class has been applied to at least one of the divs already
+	if (!win){ // Used to prevent this code block from running if you have already won
+		if(!outOfBounds) // Checks if the youlose class has already been applied
 		{
+			outOfBounds = true;
+			statusState.innerText = 'You Lose! Click the "S" to reset and play again.';
 			for (var i = 0; i < boundaries.length; i++) {
 			boundaries[i].className += " youlose";
 			}
 		}
 	}
+}
 
 function CheckWin(){
-	if(!hasClass(boundaries[0], "youlose")){
-		alert("You Win!!!");
-	}
+	if(!outOfBounds){ //Checks if the user hit any boundaries and lost the game
+		win = true;
+		statusState.innerText = 'You Win! Click the "S" to reset and play again.';
+		}
 
 }
 
 function resetGame(){
+	win = false;
+	outOfBounds = false;
+	statusState.innerText = 'Move your mouse over the "S" to begin.';	
 	for (var i = 0; i < boundaries.length; i++) {
 		boundaries[i].className = "boundary";
 	}
-	
-
 }
-
-//Used to check if a div element already has the youlose colour applied to it to prevent
-//the onmouseover event from adding multiple instances of the class the the element
-function hasClass(element, cls) {
-    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
-}
-
